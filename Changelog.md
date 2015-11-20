@@ -1,3 +1,16 @@
+# 2.2.0 - 2015-10-26
+
+* Support for Node.js 3.x and 4.x. [#183](https://github.com/danielgtaylor/aglio/issues/183)
+* Upgraded to [Protagonist](https://github.com/apiaryio/protagonist) version 1.x, which has disabled the JSON Schema generation from MSON until some bugs can be worked out.
+
+# 2.1.1 - 2015-09-14
+
+* Fix the default include path behavior when outputting a file to use the basename of the input file rather than `process.cwd()`. Also updates documentation to mention this behavior and option. [#166](https://github.com/danielgtaylor/aglio/issues/166)
+
+# 2.1.0 - 2015-09-11
+
+* Add a `--include-path` option to set the path for relative includes. [#165](https://github.com/danielgtaylor/aglio/pull/165)
+
 # 2.0.4 - 2015-08-14
 
 * Show theme name before loading when given `--verbose` option.

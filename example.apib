@@ -41,7 +41,7 @@ Some non-standard Markdown extensions are also supported, such as this informati
 * Informational block fenced with `::: note` and `:::`
 * Warning block fenced with `::: warning` and `:::`
 * [x] GitHub-style checkboxes using `[x]` and `[ ]`
-* Emoji support :smile: :airplane: using `:smile:` ([cheat sheet](http://www.emoji-cheat-sheet.com/))
+* Emoji support :smile: :ship: :cake: using `:smile:` ([cheat sheet](http://www.emoji-cheat-sheet.com/))
 
 These extensions may change in the future as the [CommonMark specification](http://spec.commonmark.org/) defines a [standard extension syntax](https://github.com/jgm/CommonMark/wiki/Proposed-Extensions).
 :::
@@ -55,7 +55,8 @@ These extensions may change in the future as the [CommonMark specification](http
 + title: Grocery list (required) - Single line description
 + body: Buy milk - Full description of the note which supports Markdown.
 
-## NoteList (array[NoteData])
+## NoteList (array)
++ (NoteData)
 
 # Group Notes
 Group description (also with *Markdown*)
@@ -83,15 +84,33 @@ Get a list of notes.
     + Attributes (NoteList)
 
 ### Create New Note [POST]
-Create a new note
+Create a new note using a title and an optional content body.
 
-+ Request (application/json)
++ Request with body (application/json)
 
     + Body
 
             {
                 "title": "My new note",
-                "body": "..."
+                "body": "This is the body"
+            }
+
++ Response 201
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "error": "Invalid title"
+            }
+
++ Request without body (application/json)
+
+    + Body
+
+            {
+                "title": "My new note"
             }
 
 + Response 201
@@ -154,6 +173,36 @@ If the value for `title` or `body` is `null` or `undefined`, then the correspond
 
             {
                 "title": "Grocery List (Safeway)"
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            X-Request-ID: f72fc914
+            X-Response-Time: 4ms
+
+    + Attributes (NoteData)
+
++ Response 404 (application/json)
+
+    + Headers
+
+            X-Request-ID: f72fc914
+            X-Response-Time: 4ms
+
+    + Body
+
+            {
+                "error": "Note not found"
+            }
+
++ Request delete body (application/json)
+
+    + Body
+
+            {
+                "body": ""
             }
 
 + Response 200 (application/json)
@@ -264,7 +313,7 @@ Get a list of bars
 Get a single tag
 
 + Parameters
-    + id
+    + id - Unique tag identifier
 
 ### GET
 

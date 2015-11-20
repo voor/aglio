@@ -8,7 +8,7 @@ An [API Blueprint](http://apiblueprint.org/) renderer that supports multiple the
 
 ## Features
 
- * Fast parsing thanks to [Drafter](https://github.com/apiaryio/drafter.js)
+ * Fast parsing thanks to [Protagonist](https://github.com/apiaryio/protagonist)
  * Asyncronous processing
  * Multiple templates/themes
  * Support for custom colors, templates, and theme engines
@@ -22,10 +22,11 @@ An [API Blueprint](http://apiblueprint.org/) renderer that supports multiple the
 ## Example Output
 Example output is generated from the [example API Blueprint](https://raw.github.com/danielgtaylor/aglio/master/example.apib) using the default [Olio theme](https://github.com/danielgtaylor/aglio/tree/olio-theme#readme).
 
- * [Default theme](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/default.html)
- * [Flatly theme](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/flatly.html)
- * [Slate theme](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/slate.html)
- * [Cyborg theme](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/cyborg.html)
+ * Default theme [two column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/default.html) or [three column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/default-triple.html)
+ * Streak theme [two column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/streak.html) or [three column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/streak-triple.html)
+ * Flatly theme [two column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/flatly.html) or [three column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/flatly-triple.html)
+ * Slate theme [two column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/slate.html) or [three column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/slate-triple.html)
+ * Cyborg theme [two column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/cyborg.html) or [three column](http://htmlpreview.github.io/?https://raw.githubusercontent.com/danielgtaylor/aglio/blob/master/examples/cyborg-triple.html)
 
 ## Including Files
 It is possible to include other files in your blueprint by using a special include directive with a path to the included file relative to the current file's directory. Included files can be written in API Blueprint, Markdown or HTML (or JSON for response examples). Included files can include other files, so be careful of circular references.
@@ -38,7 +39,7 @@ For tools that do not support this include directive it will just render out as 
 
 
 # Installation & Usage
-There are two ways to use aglio: as an executable or as a library for Node.js.
+There are three ways to use aglio: as an executable, in a docker container or as a library for Node.js.
 
 ## Executable
 Install aglio via NPM. You need Node.js installed and you may need to use `sudo` to install globally:
@@ -53,10 +54,13 @@ Then, start generating HTML.
 # Default theme
 aglio -i input.apib -o output.html
 
+# Use three-column layout
+aglio -i input.apib --theme-template triple -o output.html
+
 # Built-in color scheme
 aglio --theme-variables slate -i input.apib -o output.html
 
-# Customize a build-in style
+# Customize a built-in style
 aglio --theme-style default --theme-style ./my-style.less -i input.apib -o output.html
 
 # Custom layout template
@@ -77,9 +81,19 @@ aglio --no-theme-condense -i input.apib -o output.html
 # Render full-width page instead of fixed max width
 aglio --theme-full-width -i input.apib -o output.html
 
+# Set an explicit file include path and read from stdin
+aglio --include-path /path/to/includes -i - -o output.html
+
 # Output verbose error information with stack traces
 aglio -i input.apib -o output.html --verbose
 ```
+
+## With Docker
+You can choose to use the provided `Dockerfile` to build yourself a repeatable and testable environment:
+
+1. Build the image with `docker build -t aglio .`
+2. Run aglio inside a container with `docker run -t aglio`
+  You can use the `-v` switch to dynamically mount the folder that holds your API blueprint.
 
 ## Node.js Library
 You can also use aglio as a library. First, install and save it as a dependency:
@@ -184,7 +198,7 @@ alio.render(blueprint, options, function (err, html, warnings) {
 ```
 
 #### aglio.renderFile (inputFile, outputFile, options, callback)
-Render an API Blueprint file and save the HTML to another file. The input/output file arguments are file paths. The options behaves the same as above for `aglio.render`.
+Render an API Blueprint file and save the HTML to another file. The input/output file arguments are file paths. The options behaves the same as above for `aglio.render`, except that the `options.includePath` defaults to the basename of the input filename.
 
 ```javascript
 aglio.renderFile('/tmp/input.apib', '/tmp/output.html', options, function (err, warnings) {
